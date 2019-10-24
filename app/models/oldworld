@@ -1,0 +1,290 @@
+require "Chunky_png"
+
+
+class World < ApplicationRecord
+
+    has_many :godworlds
+    has_many :paths
+    has_many :gods, through: :godworlds
+
+
+    def unpack_seed
+
+        unpacker = Egg.all.first.itraits.split(",")
+
+        unpacker[0] = 255  
+        end
+
+
+
+
+    def next_frame
+        pngx = ChunkyPNG::Image.new(self.width, self.height, ChunkyPNG::Color::BLACK)
+
+        plant_logic()
+
+        herbivore_logic()
+
+
+        Path.all.each do |path|
+            pngx[path.x, path.y] = ChunkyPNG::Color.rgba(path.r, path.g, path.b, 255)
+        end
+
+
+        Plant.all.each do |plant|
+            pngx[plant.path.x, plant.path.y] =ChunkyPNG::Color.rgba(plant.r, plant.g, plant.b, 255)
+        end
+        Plant.all.each do |herbivore|
+            pngx[herbivore.path.x, herbivore.path.y] =ChunkyPNG::Color.rgba(herbivore.r, herbivore.g, herbivore.b, 255)
+        end
+        Plant.all.each do |predator|
+            pngx[predator.path.x, predator.path.y] = ChunkyPNG::Color.rgba(predator.r, predator.g, predator.b, 255)
+        end
+
+
+        weather_logic(pngx)
+        pngx.save("eatrh.png")
+    end
+
+
+    def plant_logic
+
+        some_kind_of_catching_box = []
+        World.all.first.paths.all.each do |paths|
+            if paths.plants
+                paths.plants.each do |planter|
+                some_kind_of_catching_box << planter
+                end
+            end
+        end
+
+        
+        some_kind_of_catching_box.each do |plant|  
+            pathspot = plant.path
+                if pathspot.energy > plant.growthrate
+                        plant.energy += plant.growthrate
+                        pathspot.energy -= plant.growthrate
+                        puts plant
+                end
+
+=begin
+            if (plant.energy > 350000 && plant.name == 4)  || (plant.energy > 250000 && plant.name == 2)  || (plant.energy > 180000 && plant.name == 1)  | (plant.energy > 55000 && plant.name == 0) 
+                case plant.name 
+                    when 0
+                    plant.energy -= 30000
+                    when 1
+                        plant.energy -= 90000
+                    when 2
+                        plant.energy -= 130000
+                    when 3
+                        plant.energy = 1
+                    when 4
+                        plant.energy -= 190000
+                else 
+                    plant.energy -= 30000
+                end
+                Egg.create(name: 11, status: 1,  typisch: 11, itraits: "0,255,0,7,0,1000000,1,2,e", pod_id: plant.id, pod_type: "Plant")       
+            end
+=end
+    plant.save
+    pathspot.save
+    end
+end
+
+def herbivore_logic
+
+    Herbivore.all.each do |herbivore|
+        pathspot = herbivore.path
+        if herbivore.energy > herbivore.growthrate
+
+
+        end
+
+    end
+
+
+end
+
+
+def weather_logic(pngx)
+
+    Weather.all.each do  |weather|
+
+                
+        y = 0
+        x = 0
+
+        if weather.name == -100 ## cloud logic
+            cloud = weather
+
+            ydim = cloud.path.y
+            xdim = cloud.path.x
+
+
+            if rand(0..3) != 0
+                if xdim > ydim && rand(0..1) == 0 && rand(0..1) == 0 && rand(0..1) == 0 && rand(0..1) == 0
+                  
+                  if rand(0..1) == 0
+                    ydim +=1
+                  else
+                    ydim -=1
+                  end
+
+
+                    ydim = [self.height, ydim].min
+                end
+                if ydim > xdim  && rand(0..1) == 0 && rand(0..1) == 0 && rand(0..1) == 0 && rand(0..1) == 0
+                    xdim +=1
+                    xdim = [self.width, xdim].min
+                end
+                if ((xdim-15)..(xdim+15)) == ((ydim-15)..(ydim+15))
+                    if rand(0..1) == 0
+                        xdim +=1
+                        xdim = [self.width, xdim].min
+                    end
+                    if rand(0..1) == 0 
+                         if rand(0..1) == 0
+                        ydim +=1
+                      else
+                        ydim -=1
+                      end
+                        ydim = [self.height, ydim].min
+                    end
+                end
+                if rand(0..1) == 0
+                    xdim +=1
+                    xdim = [self.width, xdim].min
+                end
+                if rand(0..1) == 0 
+                      if rand(0..1) == 0
+                    ydim +=1
+                  else
+                    ydim -=1
+                  end
+                    ydim = [self.height, ydim].min
+                end
+
+                if xdim > ydim && rand(0..1) == 0 && rand(0..3) == 0 
+                 #   ydim +=1
+                    ydim = [self.height, ydim].min
+                end
+                if ydim > xdim  && rand(0..1) == 0 && rand(0..3) == 0 
+                    xdim +=1
+                    xdim = [self.width, xdim].min
+                end
+            end
+
+1360.times do
+    fuzzx = rand(-2..2)
+    fuzzy = rand(-2..2)
+
+
+    if rand(-2..2) == fuzzx
+        #rain(Fighter.sortedsands[xdim+fuzzx][ydim+fuzzy], cloud)
+            end
+red = ChunkyPNG::Color.r(pngx[xdim+fuzzx, ydim+fuzzy]) *255
+green = ChunkyPNG::Color.g(pngx[xdim+fuzzx, ydim+fuzzy]) *255
+blue =  ChunkyPNG::Color.b(pngx[xdim+fuzzx, ydim+fuzzy]) *255
+cloudred =  cloud.r * (cloud.a/1)
+cloudgreen =  cloud.g * (cloud.a/1)
+cloudblue = cloud.b * (cloud.a/1)
+red = [((cloudred+red)/255).to_i, 255].min
+green = [((cloudgreen+green)/255).to_i, 255].min
+blue = [((cloudblue+blue)/255).to_i, 255].min
+pngx[xdim+fuzzx, ydim+fuzzy] = ChunkyPNG::Color.rgba(red, green, blue, 255)
+end
+
+
+cloud.path = Path.find_by(x: xdim, y: ydim)
+
+
+        if weather.name == -999 ## sun logic
+            thesun = weather
+            xdimsun = thesun.path.x
+            ydimsun = thesun.path.y
+            thesun.r = rand(255)
+            thesun.g = rand(255)
+            thesun.b = rand(255)
+            thesun.a = 7
+            xdimsun -= 5
+                if ydimsun < 0
+                    ydimsun = self.height
+                end
+                if xdimsun< 0
+                    xdimsun= self.width
+                end
+                if ydimsun > self.height
+                    ydimsun = 0
+                end
+                if xdimsun > self.width
+                    xdimsun= 0
+                end
+                minrange = [self.width, self.height].min
+                solarsize = ((50/6)*5) 
+                solarsize.times do
+                            y = 0-(solarsize/2)
+                            x = 0-(solarsize/2)
+                            (solarsize).times do
+                                (solarsize).times do
+                                    if (solarsize %  (self.width ** (1.to_f/3.to_f)).to_i) == 0
+                                    fuzzx = x + xdimsun
+                                    fuzzy = y + ydimsun
+                            
+                                    if fuzzx > self.width 
+                                        fuzzx = (fuzzx - self.width)
+                                        if fuzzx < 0
+                                            fuzzx = 0
+                                        end
+                                    end
+                                    if fuzzy > self.height 
+                                        fuzzy = (fuzzy - self.height)
+                                        if fuzzy < 0
+                                            fuzzy = 0
+                                        end
+                                    end
+                                    if fuzzx < 0
+                                        fuzzx = (fuzzx + self.width)
+                                    end
+                                    if fuzzy < 0
+                                        fuzzy = (fuzzy +  self.height)
+                                    end
+                   
+                                    if fuzzx <= -1
+                                        fuzzx = (fuzzx % self.width)
+                                    end
+                                    if fuzzy <= -1
+                                          fuzzy = (fuzzy % self.height)
+                                      end   
+    
+                                red = ChunkyPNG::Color.r(pngx[fuzzx, fuzzy]) *255
+                                green = ChunkyPNG::Color.g(pngx[fuzzx, fuzzy]) *255
+                                blue =  ChunkyPNG::Color.b(pngx[fuzzx, fuzzy]) *255
+                                thesunred =  thesun.r * (thesun.a)
+                                thesungreen =  thesun.g * (thesun.a)
+                                thesunblue = thesun.b * (thesun.a)
+                                red = [((thesunred+red)/255).to_i, 255].min
+                                green = [((thesungreen+green)/255).to_i, 255].min
+                                blue = [((thesunblue+blue)/255).to_i, 255].min
+                                pngx[fuzzx, fuzzy] = ChunkyPNG::Color.rgba(red, green, blue, 255) #renders to the screen
+    
+                        #        shine(Fighter.sortedsands[fuzzx][fuzzy]) ## the shine method interacts with the energy of water, plants and soil moisture. 
+    
+                            end
+                            x+=1
+                            end
+                            x = 0-(solarsize/2)
+                            y+=1
+                            end
+                            y= 0-(solarsize/2)
+                                    solarsize -=1  
+                end        
+            end
+        end
+       weather.save
+    end
+end
+
+
+
+
+end

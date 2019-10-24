@@ -1,0 +1,17 @@
+
+<%= button_to "Return to world", world_path(1), method: :get%>
+<br>
+<br>
+<br>
+
+<h1>The sun maker <h1>
+
+
+
+
+<%= "#{@suns.length} suns exist" %>
+
+
+<%= form_for :New_sun do |t|%>
+<%= t.submit %>
+<% end %>

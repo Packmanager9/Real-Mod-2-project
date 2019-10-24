@@ -1,0 +1,16 @@
+
+
+<h1> <%= @worlds.gods.first.name + "'s World"%><h1>
+
+<%= image_tag "world-1.png" %>
+
+
+
+    <li><%= link_to "Next Frame", "#{@worlds.id}/showa"%></li>
+    <li><%= link_to "Create Sun", weathers_createsun_path%></li>
+    <li><%= link_to "Destroy Suns", weathers_destroysun_path%></li>
+    <li><%= link_to "Edit Random Plant", plant_edit_path%></li>
+<%= button_to "Suns list", weathers_index_path, method: :get%>
+<%= button_to "Plant list", plants_path, method: :get%>
+<%= button_to "World list", worlds_path, method: :get%>
+

@@ -1,0 +1,5 @@
+<%= flash[:message] %>
+<%= form_for :auth do |f| %>
+    <%= f.text_field :name %>
+    <%= f.submit "Login" %>
+<% end %>

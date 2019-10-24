@@ -1,0 +1,14 @@
+
+
+ <h1> Worlds Index <h1>
+ 
+
+    <li><%= link_to "Login", login_path%></li>
+ 
+
+
+  <% @worlds.each do |worlds| %>
+    <li><%= link_to worlds.gods.first.name, world_path(worlds)%></li>
+  <% end  %>
+
+

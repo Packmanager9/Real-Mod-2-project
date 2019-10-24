@@ -1,0 +1,19 @@
+<h1> Change a plant to a set of R G B values</h1>
+
+
+<%= button_to "Return to world", world_path(1), method: :get%>
+<br>
+<br>
+<br>
+
+<%=   flash[:message] %>
+
+<%= form_for Plant.all.first do |t|%>
+<%= t.label :r  %>
+<%= t.number_field :r %>
+<%= t.label :g  %>
+<%= t.number_field :g %>
+<%= t.label :b  %>
+<%= t.number_field :b %>
+<%= t.submit %>
+<% end %>

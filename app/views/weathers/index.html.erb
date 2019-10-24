@@ -1,0 +1,20 @@
+
+
+<h1> All the stars in the sky (if any) <h1>
+
+
+
+<% @weathers.each do |sun|%>
+
+
+
+<%= " Sun at X: #{sun.path.x}, Y: #{sun.path.y}"%><br>
+<%= "Name: #{sun.id},  Redness: #{sun.r}, Greenity: #{sun.g}, Blueocity: #{sun.b}"%><br>
+<%end%>
+
+
+
+<%= button_to "Return to world", world_path(1), method: :get%>
+<br>
+<br>
+<br>

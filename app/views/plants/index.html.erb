@@ -1,0 +1,58 @@
+<h1> All plants</h1>
+
+
+<%= button_to "Return to world", world_path(1), method: :get%>
+<br>
+
+    <%= button_to "Edit Random Plant", plant_edit_path(1), method: :get%>
+<br>
+<br>
+
+<%= "The Plants Average Energy is #{@average} "%>
+<br>
+<br>
+
+
+<% @plants.each do |plant|%>
+<%= " Plant at X: #{plant.path.x}, Y: #{plant.path.y}, Has"%><br>
+
+
+<%  bigred =(plant.r/16).to_i          %>
+
+<%  tinred = (plant.r%16)           %>
+
+<%  biggreen = (plant.g/16).to_i          %>
+
+<%  tingreen = (plant.g%16)           %>
+
+<%  bigblue =(plant.b/16).to_i          %>
+
+<%  tinblue = (plant.b%16)           %>
+
+
+
+<%  bigredx = 15-(plant.r/16).to_i          %>
+
+<%  tinredx = 15-(plant.r%16)           %>
+
+<%  biggreenx = 15-(plant.g/16).to_i          %>
+
+<%  tingreenx = 15-(plant.g%16)           %>
+
+<%  bigbluex = 15-(plant.b/16).to_i          %>
+
+<%  tinbluex = 15-(plant.b%16)           %>
+
+
+<%  colorstring = "#" + bigred.to_s(16) +    tinred.to_s(16) +    biggreen.to_s(16) +    tingreen.to_s(16) +    bigblue.to_s(16) +    tinblue.to_s(16)  %>
+
+<%  colorstringx = "#" + bigredx.to_s(16) +    tinredx.to_s(16) +    biggreenx.to_s(16) +    tingreenx.to_s(16) +    bigbluex.to_s(16) +    tinbluex.to_s(16)  %>
+
+
+<div style="background-color: <%=colorstring%> ;color: <%=colorstringx%>"> 
+<%= " R: #{plant.r}, G: #{plant.g}, B: #{plant.b}, Energy:#{plant.energy}"%><br>
+
+</div>
+
+<%end%>
+

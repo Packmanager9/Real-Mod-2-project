@@ -1,0 +1,13 @@
+<h1>The sun maker <h1>
+
+
+
+<%= form_for :weather do |t|%>
+<%= t.label :r  %>
+<%= t.number_field :r %>
+<%= t.label :g  %>
+<%= t.number_field :g %>
+<%= t.label :b  %>
+<%= t.number_field :b %>
+<%= t.submit %>
+<% end %>
